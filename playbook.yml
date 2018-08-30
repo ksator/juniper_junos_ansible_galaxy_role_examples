@@ -1,0 +1,43 @@
+---
+
+ - name: create directories
+   hosts: localhost
+   gather_facts: no
+   tasks:
+
+   - name: create directories
+     file:
+       path: "{{ playbook_dir }}/{{ item }}"
+       state: directory
+     with_items: 
+       -  rendered_template
+       -  candidate_config
+     check_mode: no
+
+
+
+ - name: render template and render candidate configuration
+   hosts: EX4300
+   connection: local
+   gather_facts: no
+   roles: 
+     - Juniper.junos
+   
+   tasks:
+
+   - name: Render template
+     template: 
+       src: "{{playbook_dir}}/template.j2" 
+       dest: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+     check_mode: no
+        
+   - name: Push config, commit check, download candidate config, rollback
+     juniper_junos_config:
+        load: 'replace'
+        provider: "{{ credentials }}"
+        src: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+        retrieve: 'candidate'
+        diff: false
+        check: true
+        commit: false
+        dest: "{{ playbook_dir }}/candidate_config/{{ inventory_hostname }}.conf"
