@@ -1,0 +1,84 @@
+---
+
+ - name: create directory
+   hosts: localhost
+   gather_facts: no
+   tasks:
+
+   - name: create directory
+     file:
+       path: "{{ playbook_dir }}/{{ item }}"
+       state: directory
+     with_items:
+       -  rendered_template
+     check_mode: no
+
+
+ - name: collect pre snapshot, generate and load conf
+   hosts: EX4300
+   connection: local
+   gather_facts: no
+   roles:
+     - Juniper.junos
+
+   tasks:
+
+   - name: collect pre snapshot
+     juniper_junos_jsnapy:
+        action: "snap_pre"
+        provider: "{{ credentials }}"
+        test_files: "{{playbook_dir}}/test_files/snap_snap_check_bgp.yml"
+
+   - name: generate conf
+     template:
+       src: "{{playbook_dir}}/template.j2"
+       dest: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+     check_mode: no
+
+   - name: load config 
+     juniper_junos_config:
+        load: 'replace'
+        provider: "{{ credentials }}"
+        src: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+        config_mode: exclusive
+        commit: yes
+        comment: commited using Ansible
+
+
+ - name: wait for peers to establish connections
+   hosts: localhost
+   gather_facts: no
+
+   tasks:
+    - pause: seconds=25
+
+ - name: collect post snapshot, compare pre and post snapshot
+   hosts: EX4300
+   connection: local
+   gather_facts: no
+   roles:
+    - Juniper.junos
+
+   tasks:
+    - name: collect post snapshot
+      juniper_junos_jsnapy:
+        action: "snap_post"
+        provider: "{{ credentials }}"
+        test_files: "{{playbook_dir}}/test_files/snap_snap_check_bgp.yml"
+    
+    - name: "Compare after Pre and Post Snapshots"
+      juniper_junos_jsnapy:
+        action: "check"
+        provider: "{{ credentials }}"
+        test_files: "{{playbook_dir}}/test_files/snap_snap_check_bgp.yml"
+      register: test
+
+    - name: Verify all JSNAPy tests passed
+      assert:
+        that:
+          - "test.passPercentage == 100"
+        msg: "jsnapy test failed on {{ inventory_hostname }}"
+ 
+    - name: Print the full test response
+      debug:
+        var: test
