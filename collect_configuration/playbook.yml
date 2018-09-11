@@ -1,0 +1,70 @@
+---
+- name: create configuration directories
+  hosts: localhost
+  gather_facts: no
+  tasks:
+
+   - name: create configuration directory
+     file:
+       path: "{{playbook_dir}}/configuration"
+       state: directory
+
+
+   - name: create configuration subdirectories
+     file:
+       path: "{{playbook_dir}}/configuration/{{ item }}"
+       state: directory
+     with_items:
+       - text
+       - xml
+       - json
+       - set 
+
+- name: Gather config from Junos devices
+  hosts: EX4300
+  connection: local
+  gather_facts: no 
+  roles:
+    - Juniper.junos
+  tasks:
+
+    - name: Gather Junos configuration in text format
+      juniper_junos_facts:
+          provider: "{{ credentials }}"
+          config_format: text
+      register: response_text
+    - name: copy collected configuration in configuration/text directory
+      copy: 
+          content: "{{ response_text.ansible_facts.junos.config }}" 
+          dest: "{{ playbook_dir }}/configuration/text/{{ inventory_hostname }}.conf"
+
+    - name: Gather Junos configuration in set format
+      juniper_junos_facts:
+          provider: "{{ credentials }}"
+          config_format: set
+      register: response_set
+    - name: copy collected configuration in configuration/set directory
+      copy:
+          content: "{{ response_set.ansible_facts.junos.config }}"
+          dest: "{{ playbook_dir }}/configuration/set/{{ inventory_hostname }}.conf"
+
+    - name: Gather Junos configuration in json format
+      juniper_junos_facts:
+          provider: "{{ credentials }}"
+          config_format: json
+      register: response_json
+    - name: copy collected configuration in configuration/json directory
+      copy:
+          content: "{{ response_json.ansible_facts.junos.config }}"
+          dest: "{{ playbook_dir }}/configuration/json/{{ inventory_hostname }}.conf"
+
+    - name: Gather Junos configuration in xml
+      juniper_junos_facts:
+          provider: "{{ credentials }}"
+          config_format: xml
+      register: response_xml
+    - name: copy collected configuration in configuration/text directory
+      copy:
+          content: "{{ response_xml.ansible_facts.junos.config }}"
+          dest: "{{ playbook_dir }}/configuration/xml/{{ inventory_hostname }}.conf"
+

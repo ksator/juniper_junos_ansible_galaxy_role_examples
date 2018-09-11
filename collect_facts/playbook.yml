@@ -1,0 +1,28 @@
+---
+
+- name: create facts directory
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: create facts directory
+      file:
+         path: "{{playbook_dir}}/facts"
+         state: directory
+
+- name: Gather facts from Junos devices
+  hosts: EX4300
+  connection: local
+  gather_facts: no 
+  roles:
+    - Juniper.junos
+  tasks:
+    - name: Gather Junos facts with no configuration
+      juniper_junos_facts:
+          provider: "{{ credentials }}"
+          savedir: facts
+      register: response
+    - name: Print the response
+      debug:
+        var: response
+ 
+
