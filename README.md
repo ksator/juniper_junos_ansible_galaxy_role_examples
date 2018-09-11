@@ -1,5 +1,5 @@
 ## About this repo
-This repository provides playbooks examples using the Juniper.junos role from galaxy.
+This repository provides Ansible playbooks examples using the Juniper.junos role from galaxy.
 
 ## Usage 
 
