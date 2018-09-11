@@ -1,8 +1,8 @@
 Playbooks to execute JSNAPy tests on Junos devices
 ```
-ansible --version
-ansible-galaxy Juniper.junos list
-pip list | grep 'eznc\|jsnapy\|jxmlease'
+$ ansible --version
+$ ansible-galaxy Juniper.junos list
+$ pip list | grep 'eznc\|jsnapy\|jxmlease'
 ```
 ```
 $ more /etc/jsnapy/jsnapy.cfg
