@@ -29,18 +29,7 @@ pip list
 ```
 Clone the repository: 
 ```
-git clone https://github.com/ksator/render_junos_candidate_configuration.git
-cd render_junos_candidate_configuration/
+git clone https://github.com/ksator/juniper_junos_ansible_role_examples.git
+cd juniper_junos_ansible_role_examples/
 ```
-Update files (inventory, variables, ...)  
-
-Run the playbook: 
-```
-ansible-playbook playbook.yml 
-```
-```
-ls rendered_template/
-ls candidate_config/
-```
-
 
