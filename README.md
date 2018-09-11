@@ -1,14 +1,5 @@
 ## About this repo
-This repository provides an Ansible playbook that render the Junos configuration files without commiting changes on Junos devices
-
-## Repository structure
-- [ansible inventory file](hosts)
-- [junos template](template.j2)
-- [host specific variables](host_vars)
-- [group specific variables](group_vars)
-- [ansible playbook](playbook.yml)
-- [directory with rendered template](rendered_template)
-- [directory with candidate configuration files](candidate_config)
+This repository provides playbooks examples using the Juniper.junos role from galaxy.
 
 ## Usage 
 
@@ -25,11 +16,12 @@ Verify:
 ```
 ansible --version
 ansible-galaxy Juniper.junos list
-pip list
+pip list | grep 'eznc\|jsnapy\|jxmlease'
 ```
 Clone the repository: 
 ```
 git clone https://github.com/ksator/juniper_junos_ansible_role_examples.git
 cd juniper_junos_ansible_role_examples/
+ls
 ```
-
+Each directory has it's own README.md file with instructions.  
