@@ -1,0 +1,29 @@
+---
+- name: create commands_output directory
+  hosts: localhost
+  gather_facts: no
+  tasks:
+
+   - name: create commands_output directory
+     file:
+       path: "{{playbook_dir}}/commands_output"
+       state: directory
+
+
+- name: Collect commands 
+  hosts: EX4300
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+
+  tasks:
+    - name: Collect commands
+      juniper_junos_command:
+         provider: "{{ credentials }}"
+         commands:
+          - "show version"
+          - "show chassis hardware"
+         format: text
+         dest_dir: "{{ playbook_dir }}/commands_output"
+ 

@@ -1,0 +1,13 @@
+
+Hardware inventory:
+Item             Version  Part number  Serial number     Description
+Chassis                                PG3713430115      EX4300-24T
+Routing Engine 0 REV 08   650-044936   PG3713430115      EX4300-24T
+FPC 0            REV 08   650-044936   PG3713430115      EX4300-24T
+  CPU                     BUILTIN      BUILTIN           FPC CPU
+  PIC 0          REV 08   BUILTIN      BUILTIN           24x 10/100/1000 Base-T
+  PIC 1          REV 08   BUILTIN      BUILTIN           4x 40GE QSFP+
+  PIC 2          REV 04   611-044925   MY3713320093      4x 1G/10G SFP/SFP+
+Power Supply 0   REV 01   740-046873   1EDE3381331       JPSU-350-AC-AFO-A
+Fan Tray 0                                               Fan Module, Airflow Out (AFO)
+Fan Tray 1                                               Fan Module, Airflow Out (AFO)
