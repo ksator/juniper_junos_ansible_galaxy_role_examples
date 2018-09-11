@@ -1,0 +1,12 @@
+
+Autonomous system number: 100
+Router ID: 192.179.0.74
+
+inet.0: 9 destinations, 9 routes (8 active, 0 holddown, 1 hidden)
+Limit/Threshold: 32768/32768 destinations
+              Direct:      5 routes,      4 active
+               Local:      3 routes,      3 active
+              Static:      1 routes,      1 active
+
+iso.0: 1 destinations, 1 routes (1 active, 0 holddown, 0 hidden)
+              Direct:      1 routes,      1 active

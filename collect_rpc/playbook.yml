@@ -1,0 +1,29 @@
+---
+- name: create rpc_output directory
+  hosts: localhost
+  gather_facts: no
+  tasks:
+
+   - name: create rpc_output directory
+     file:
+       path: "{{playbook_dir}}/rpc_output"
+       state: directory
+
+
+- name: Collect RPCs 
+  hosts: EX4300
+  connection: local
+  gather_facts: no
+  roles:
+    - Juniper.junos
+
+  tasks:
+    - name: Collect RPCs
+      juniper_junos_rpc:
+         provider: "{{ credentials }}"
+         rpcs:
+          - "get-route-summary-information"
+          - "get-software-information"
+         format: text
+         dest_dir: "{{ playbook_dir }}/rpc_output"
+ 
