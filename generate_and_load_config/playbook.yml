@@ -1,0 +1,40 @@
+---
+
+ - name: create directory
+   hosts: localhost
+   gather_facts: no
+   tasks:
+
+   - name: create directory
+     file:
+       path: "{{ playbook_dir }}/{{ item }}"
+       state: directory
+     with_items:
+       -  rendered_template
+     check_mode: no
+
+
+ - name: render template
+   hosts: EX4300
+   connection: local
+   gather_facts: no
+   roles:
+     - Juniper.junos
+
+   tasks:
+
+   - name: Render template
+     template:
+       src: "{{playbook_dir}}/template.j2"
+       dest: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+     check_mode: no
+
+   - name: load config 
+     juniper_junos_config:
+        load: 'replace'
+        provider: "{{ credentials }}"
+        src: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+        config_mode: exclusive
+        commit: yes
+        comment: commited using Ansible
+

@@ -1,0 +1,79 @@
+---
+
+ - name: create directory
+   hosts: localhost
+   gather_facts: no
+   tasks:
+
+   - name: create directory
+     file:
+       path: "{{ playbook_dir }}/{{ item }}"
+       state: directory
+     with_items:
+       -  rendered_template
+     check_mode: no
+
+
+ - name: render template
+   hosts: EX4300
+   connection: local
+   gather_facts: no
+   roles:
+     - Juniper.junos
+
+   tasks:
+
+   - name: Render template
+     template:
+       src: "{{playbook_dir}}/template.j2"
+       dest: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+     check_mode: no
+
+   - name: load config 
+     juniper_junos_config:
+        load: 'replace'
+        provider: "{{ credentials }}"
+        src: "{{playbook_dir}}/rendered_template/{{ inventory_hostname }}.conf"
+        config_mode: exclusive
+
+ - name: wait for peers to establish connections
+   hosts: localhost
+   gather_facts: no
+
+   tasks:
+    - pause: seconds=25
+
+ - name: execute ping from junos devices 
+   hosts: EX4300
+   connection: local
+   gather_facts: no
+   roles:
+    - Juniper.junos
+
+   tasks:
+
+    - name: check if junos devices can ping directly connected ip @
+      junos_ping:
+        provider: "{{ credentials }}"
+        dest_ip: "{{ item.peer_ip }}"
+        source_ip: "{{ item.local_ip }}"
+        ttl: 1
+      with_items:
+      - "{{ neighbors }}"
+
+
+    - name: check if junos devices can ping some ip @ supposed to be learnt with BGP
+      juniper_junos_ping: 
+         provider: "{{ credentials }}"
+         dest: "{{ item.peer_loopback }}"
+         acceptable_percent_loss: 10
+         count: 10
+         rapid: false
+         ttl: 1
+         size: 1000 
+         do_not_fragment: true
+         source: "{{ item.local_ip }}"
+      with_items:
+         - "{{ neighbors }}"
+
+
