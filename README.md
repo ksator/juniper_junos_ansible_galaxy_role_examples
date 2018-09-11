@@ -25,3 +25,7 @@ cd juniper_junos_ansible_role_examples/
 ls
 ```
 Each directory has it's own README.md file with instructions.  
+
+## Network topology
+
+3 EX devices connected in a triangle topology
