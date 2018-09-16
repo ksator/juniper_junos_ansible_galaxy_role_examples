@@ -3,7 +3,7 @@ This is the equivalent of the ```request system reboot``` CLI command.
 
 Run this command to reboot all Junos devices
 ```
-ansible-playbook reboot/playbook.yml
+$ ansible-playbook reboot/playbook.yml
 ```
 
 
