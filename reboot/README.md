@@ -1,4 +1,4 @@
-The playbook [**playbook.yml**](reboot/playbook.yml) reboots Junos devices.  
+The playbook [**playbook.yml**](playbook.yml) reboots Junos devices.  
 This is the equivalent of the ```request system reboot``` CLI command.
 
 Run this command to reboot all Junos devices
