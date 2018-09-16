@@ -1,0 +1,17 @@
+- name: load configuration using a list of lines
+  hosts: EX4300
+  connection: local
+  gather_facts: no
+
+  roles:
+    - Juniper.junos
+
+  tasks:
+
+    - name: configure Junos devices with a list of lines
+      juniper_junos_config:
+          provider: "{{ credentials }}"
+          ignore_warning: true
+          lines:
+            - delete system syslog host 1.1.1.1
+            - set system syslog host 2.2.2.2
